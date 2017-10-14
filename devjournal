@@ -1,0 +1,12 @@
+======================================================
+2017/10/14 takeshi:
+
+we are using web-ext to simplify development:
+  npm -g install web-ext
+
+  web-ext run
+
+To build the extension we will use:
+  npm run build
+
+

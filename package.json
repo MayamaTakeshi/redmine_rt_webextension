@@ -1,0 +1,25 @@
+{
+  "name": "redmine_rt_webextension",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "actioncable": "^5.1.4",
+    "websocket-rails-js": "git+https://github.com/MayamaTakeshi/websocket-rails-js.git"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm install && mkdir -p third_party && cp -f node_modules/actioncable/lib/assets/compiled/action_cable.js third_party/ && cp -f node_modules/websocket-rails-js/websocket_rails.0.0.1.min.js third_party/ && web-ext build --overwrite-dest --ignore-files package* --ignore-files devjournal"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MayamaTakeshi/redmine_rt_webextension.git"
+  },
+  "author": "MayamaTakeshi <mayamatakeshi@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MayamaTakeshi/redmine_rt_webextension/issues"
+  },
+  "homepage": "https://github.com/MayamaTakeshi/redmine_rt_webextension#readme"
+}

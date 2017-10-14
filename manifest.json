@@ -1,0 +1,27 @@
+{
+	"manifest_version": 2,
+	"name": "redmine_rt",
+	"version": "1.0",
+
+  "description": "Connects to Redmine server using WebSocket and send/receive messages",
+
+	"options_ui": {
+		"page": "options.html"
+	},
+
+	"permissions": [
+		"<all_urls>",
+		"notifications",
+		"storage",
+		"tabs"
+	],
+
+	"background": {
+		"scripts": [
+			"third_party/action_cable.js",
+			"third_party/websocket_rails.0.0.1.min.js",
+			"js/background.js"
+		]
+	}
+}
+	
