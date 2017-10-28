@@ -9,4 +9,8 @@ we are using web-ext to simplify development:
 To build the extension we will use:
   npm run build
 
+======================================================
+2017/10/22 takeshi:
+
+We need to create a ws_client object that must abstract ActionCable/Websocket-Rails because if the users changes redmine_url, we will need shutdown the current connection and connect with the new url and it might use a different ws_mode.
 

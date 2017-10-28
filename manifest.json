@@ -4,22 +4,36 @@
 	"version": "1.0",
 
   "description": "Connects to Redmine server using WebSocket and send/receive messages",
+	"icons": {
+		"48": "icons/redmine-48.png"
+	},
 
 	"options_ui": {
 		"page": "options.html"
 	},
 
 	"permissions": [
+		"webRequest",
+		"*://*/",
+		"*://*/*",
 		"<all_urls>",
 		"notifications",
 		"storage",
-		"tabs"
+		"tabs",
+		"cookies"
 	],
+
+	"browser_action": {
+		"default_icon": "icons/redmine-32.png",
+		"default_title": "redmine_rt",
+		"default_popup": "popup/main.html"
+	},
 
 	"background": {
 		"scripts": [
 			"third_party/action_cable.js",
 			"third_party/websocket_rails.0.0.1.min.js",
+			"js/redmine_channels.js",
 			"js/background.js"
 		]
 	}
