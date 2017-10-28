@@ -10,7 +10,7 @@ var msg_handler = (msg) => {
 browser.storage.local.get('redmine_url').then(
 	(val) => {
 	console.log("got storage.local.get result");
-	console.dir(val.redmine_url);
+	console.dir(val);
 	if(val.redmine_url && val.redmine_url != "") {
 		chan = RedmineChannels.setup("admin", val.redmine_url, msg_handler);		
 	}

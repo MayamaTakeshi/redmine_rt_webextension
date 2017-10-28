@@ -40,8 +40,10 @@
 			active: true,
 
 			start: function() {
+				self = this;
+
 				if(this.ws_mode == 'actioncable') {
-					console.log("Opening actioncable connection");
+					console.log("Opening actioncable connection. redmine_url=" + redmine_url);
 					this.cable = ActionCable.createConsumer(redmine_url + '/cable');
 
 					this.cable.subscriptions.create({
@@ -52,11 +54,12 @@
 						received: event_handler
 					});
 				} else {
-					console.log("Opening websocket-rails connection");
-					this.dispatcher = new WebSocketRails(window.location.host + '/websocket');
+					console.log("Opening websocket-rails connection. redmine_url=" + redmine_url);
+					var host = redmine_url.split("//")[1];
+					this.dispatcher = new WebSocketRails(host + '/websocket');
 					var private_channel = this.dispatcher.subscribe_private("user:" + user_login + ':messages',
 						function(current_user) {
-							console.log(current_user.name + " has joined the channel");
+							//console.log(current_user.name + " has joined the channel");
 							private_channel.bind('ALL', event_handler);
 						},
 						function(reason) {
@@ -69,7 +72,7 @@
 						console.log("websocket-rails connection closed");
 						if(this.inactive) return;
 						setTimeout(function () { 
-							this.start()
+							self.start()
 						}, 2000);
 					});
 
