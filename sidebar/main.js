@@ -1,3 +1,9 @@
+var msg_input = document.getElementById("message");
+
+document.getElementById("send_message").addEventListener('click', function(e) {
+	console.dir(e);
+	browser.runtime.sendMessage(null, {msg: msg_input.value});
+});
 
 document.getElementById("login").addEventListener('click', function(e) {
 	console.dir(e);

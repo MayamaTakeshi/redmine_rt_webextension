@@ -9,7 +9,7 @@
 	},
 
 	"options_ui": {
-		"page": "options.html"
+		"page": "options/options.html"
 	},
 
 	"permissions": [
@@ -29,21 +29,21 @@
 		"default_popup": "popup/main.html"
 	},
 
+	"sidebar_action": {
+		"default_icon": "icons/redmine-32.png",
+		"default_title": "redmine_rt",
+		"default_panel": "sidebar/panel.html",
+    "browser_style": true
+	},
+
+
 	"background": {
 		"scripts": [
 			"third_party/action_cable.js",
 			"third_party/websocket_rails.0.0.1.min.js",
-			"js/redmine_channels.js",
-			"js/background.js"
+			"background/redmine_channels.js",
+			"background/background.js"
 		]
-	},
-
-  "applications": {
-    "gecko": {
-      "id": "b8c12cb8-ae98-4861-9a65-b35e4c59b2e6@test.com",
-      "strict_min_version": "42.0"
-    }
-  }
-
+	}
 }
 	

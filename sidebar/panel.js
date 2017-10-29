@@ -1,3 +1,4 @@
+var msg_input = document.getElementById("message");
 
 document.getElementById("login").addEventListener('click', function(e) {
 	console.dir(e);
