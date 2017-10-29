@@ -11,7 +11,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm install && mkdir -p third_party && cp -f node_modules/actioncable/lib/assets/compiled/action_cable.js third_party/ && cp -f node_modules/websocket-rails-js/websocket_rails.0.0.1.min.js third_party/ && web-ext build --overwrite-dest --ignore-files package* --ignore-files devjournal"
+    "build": "npm install && mkdir -p third_party && cp -f node_modules/actioncable/lib/assets/compiled/action_cable.js third_party/ && cp -f node_modules/websocket-rails-js/websocket_rails.0.0.1.min.js third_party/ && cp -f node_modules/webextension-polyfill/dist/browser-polyfill.js third_party/ && web-ext build --overwrite-dest --ignore-files package* --ignore-files devjournal"
   },
   "repository": {
     "type": "git",

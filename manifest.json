@@ -9,7 +9,8 @@
 	},
 
 	"options_ui": {
-		"page": "options/options.html"
+		"page": "options/options.html",
+    "browser_style": true
 	},
 
 	"permissions": [
@@ -39,9 +40,9 @@
 
 	"background": {
 		"scripts": [
+			"third_party/browser-polyfill.js",
 			"third_party/action_cable.js",
 			"third_party/websocket_rails.0.0.1.min.js",
-			"node_modules/webextension-polyfill/dist/browser-polyfill.js",
 			"background/redmine_channels.js",
 			"background/background.js"
 		]

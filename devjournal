@@ -14,3 +14,21 @@ To build the extension we will use:
 
 We need to create a ws_client object that must abstract ActionCable/Websocket-Rails because if the users changes redmine_url, we will need shutdown the current connection and connect with the new url and it might use a different ws_mode.
 
+======================================================
+2017/10/29 takeshi:
+
+Tips for debugging:
+
+Firefox:
+  - run 'web-ext run'
+  - on the firefox instance that is opened:
+    - open a tab to 'about:addons' (set the redmine_url here)
+    - open a tab to 'about:debugging' (select redmine_rt_webextension and click 'Debug' to open console to follow events in the webextension)
+
+Chrome:
+  - go to chrome://extensions/
+  - enable 'Developer mode"
+  - Click on unpacked extension and open the folder with the webextension source.
+  - To debug 'options', right click on its popup window and select 'inspect'.
+
+

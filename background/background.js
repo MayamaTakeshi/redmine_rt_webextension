@@ -44,14 +44,10 @@ var msg_handler = (msg) => {
 
 browser.storage.local.get('redmine_url').then(
 	(val) => {
-	console.log("got storage.local.get result");
 	console.dir(val);
 	if(val.redmine_url && val.redmine_url != "") {
 		chan = RedmineChannels.setup("admin", val.redmine_url, msg_handler);		
 	}
 });
-
-// The below line works in chrome. We are just not being able to store the redmine_url in local storage
-//chan = RedmineChannels.setup("admin", "http://192.168.2.169:3000", msg_handler);		
 
 browser.runtime.onMessage.addListener(msg_handler);
