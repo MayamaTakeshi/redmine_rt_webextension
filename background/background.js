@@ -51,5 +51,7 @@ browser.storage.local.get('redmine_url').then(
 	}
 });
 
+// The below line works in chrome. We are just not being able to store the redmine_url in local storage
+//chan = RedmineChannels.setup("admin", "http://192.168.2.169:3000", msg_handler);		
 
 browser.runtime.onMessage.addListener(msg_handler);

@@ -1,5 +1,6 @@
 
 document.getElementById("login").addEventListener('click', function(e) {
+	console.log("login clicked");
 	console.dir(e);
   
 	var xhttp = new XMLHttpRequest();

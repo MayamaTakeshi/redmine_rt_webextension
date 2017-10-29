@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "actioncable": "^5.1.4",
+    "webextension-polyfill": "^0.2.1",
     "websocket-rails-js": "git+https://github.com/MayamaTakeshi/websocket-rails-js.git"
   },
   "devDependencies": {},
