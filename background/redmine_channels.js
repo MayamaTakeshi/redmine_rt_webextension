@@ -1,39 +1,10 @@
 (function() {
 	this.RedmineChannels || (this.RedmineChannels = {});
 
-	RedmineChannels.resolve_ws_mode = function(obj) {
-		console.log("resolve_ws_mode");
-		console.dir(obj);
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4) {
-				console.log('status=' + this.status);
-				console.dir(this);
-				if(!obj.active) {
-					return;
-				}
-				if(this.status == 200) {
-					var json = JSON.parse(this.responseText);
-					obj.ws_mode = json.ws_mode;
-					obj.start();
-				} else {
-					console.log("failed. starting timeout for retry");
-					setTimeout(() => {
-						if(obj.active) {
-							RedmineChannels.resolve_ws_mode(obj)
-						}
-          }, 5000)
-				}
-			}
-		};
-		console.log(obj.redmine_url);
-		xhttp.open("GET", obj.redmine_url + "/channels/info", true);
-		xhttp.withCredentials = true;
-		xhttp.send();
-	};	
-
-	RedmineChannels.setup = function(user_login, redmine_url, event_handler) {
+	RedmineChannels.setup = function(ws_mode, user_login, redmine_url, event_handler) {
+		console.log("RedmineChannels.setup");
 		var obj = {
+			ws_mode: ws_mode,
 			user_login: user_login,
 			redmine_url: redmine_url,
 			event_handler: event_handler,
@@ -75,7 +46,6 @@
 							self.start()
 						}, 2000);
 					});
-
 				}
 			},
 
@@ -89,7 +59,7 @@
 			}
 		};
 
-		RedmineChannels.resolve_ws_mode(obj);
+		obj.start();
 
 		return obj;	
 	};

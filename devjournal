@@ -31,4 +31,30 @@ Chrome:
   - Click on unpacked extension and open the folder with the webextension source.
   - To debug 'options', right click on its popup window and select 'inspect'.
 
+======================================================
+2017/10/30 takeshi:
+
+Draft:
+
+Startup:
+  - check local redmine_url. If set, send channels/session_info request to server. 
+  - this should return ws_mode and user_name (login).
+  - if there is no login, notify user and switch browser_action to login panel
+  - if there is login, switch to loggedin panel (which will have a logout option) and start ws conn
+
+Events:
+  - {"event": "redmine_url_saved", "redmine_url": XXX}: compare with current redmine_url. If it is different, close current ws conn and execute Startup procedure
+  - {"event": "unauthorized"}: notify user and switch browser_action to login panel
+  - {"event": "loggedin"}: restart
+
+
+
+Calling 
+  http://REDMINE_SERVER/channels/session_info
+from within the webextension should return:
+  {"ws_mode":"actioncable|websocket-rails","user":"USER_LOGIN_NAME"}
+or:
+  {"ws_mode":"actioncable|websocket-rails","user":""}
+if there is no valid session cookie
+
 

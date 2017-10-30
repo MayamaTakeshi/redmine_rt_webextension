@@ -4,11 +4,8 @@ var chan;
 var msg_handler = (msg) => {
 	console.log("background.js got message");
 	console.dir(msg);
-	if(msg.command == "popup_dlg") {
-		var dlg = document.getElementById("dlg");
-		console.dir(dlg);
-		dlg.showModal();
-	} else if(msg.command == "open_url") {
+
+	if(msg.command == "open_url") {
 		browser.tabs.query({
 			//url: msg.url
 			currentWindow: true
@@ -42,11 +39,50 @@ var msg_handler = (msg) => {
 	}
 };
 
+var startup = () => {
+	if(chan) {
+		chan.shutdown();
+	}
+
+	console.log("startup");
+
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function() {
+		if (this.readyState == 4) {
+			console.log(this.status);
+			if(this.status == 200) {
+				console.log("success");
+				var json = JSON.parse(this.responseText);
+				console.dir(json);
+				if(json.user != "") {
+					chan = RedmineChannels.setup(json.ws_mode, json.user, redmine_url, msg_handler);		
+				} else {
+					console.log("no json.user");
+					console.log(json.user);
+				}
+			} else {
+				console.log("failed. starting timeout for retry");
+				setTimeout(() => {
+					if(obj.active) {
+						startup();
+					}
+				}, 5000)
+			}
+		}
+	};
+	xhr.open("GET", redmine_url + "/channels/session_info", true);
+	xhr.withCredentials = true;
+	xhr.send();
+	
+};
+
 browser.storage.local.get('redmine_url').then(
 	(val) => {
+	console.log("redmine_url from storage.local:");
 	console.dir(val);
 	if(val.redmine_url && val.redmine_url != "") {
-		chan = RedmineChannels.setup("admin", val.redmine_url, msg_handler);		
+		redmine_url = val.redmine_url;
+		startup();
 	}
 });
 
