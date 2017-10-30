@@ -1,6 +1,12 @@
 var redmine_url;
 var chan;
 
+var state = {"name": "loggedout", "user": ""};
+
+function get_state() {
+	return state;
+}
+
 var msg_handler = (msg) => {
 	console.log("background.js got message");
 	console.dir(msg);
@@ -49,31 +55,23 @@ var startup = () => {
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if (this.readyState == 4) {
-			console.log(this.status);
 			if(this.status == 200) {
 				console.log("success");
 				var json = JSON.parse(this.responseText);
-				console.dir(json);
 				if(json.user != "") {
 					chan = RedmineChannels.setup(json.ws_mode, json.user, redmine_url, msg_handler);		
+					state = {"name": "loggedin", "user": json.user}
 				} else {
-					console.log("no json.user");
-					console.log(json.user);
+					state = {"name": "loggedout", "user": ""}
 				}
 			} else {
 				console.log("failed. starting timeout for retry");
-				setTimeout(() => {
-					if(obj.active) {
-						startup();
-					}
-				}, 5000)
 			}
 		}
 	};
 	xhr.open("GET", redmine_url + "/channels/session_info", true);
 	xhr.withCredentials = true;
 	xhr.send();
-	
 };
 
 browser.storage.local.get('redmine_url').then(

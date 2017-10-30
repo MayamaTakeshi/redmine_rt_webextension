@@ -1,4 +1,10 @@
 
+console.log("popup/main.js");
+browser.runtime.getBackgroundPage().then((page) => {
+	console.log("get_state got");
+	console.dir(page.get_state());
+});
+
 document.getElementById("login").addEventListener('click', function(e) {
 	console.log("login clicked");
 	console.dir(e);

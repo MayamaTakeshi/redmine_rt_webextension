@@ -33,8 +33,7 @@
 	"sidebar_action": {
 		"default_icon": "icons/redmine-32.png",
 		"default_title": "redmine_rt",
-		"default_panel": "sidebar/panel.html",
-    "browser_style": true
+		"default_panel": "sidebar/panel.html"
 	},
 
 
