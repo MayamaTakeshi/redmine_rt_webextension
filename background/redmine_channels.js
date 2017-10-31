@@ -18,8 +18,8 @@
 					this.cable = ActionCable.createConsumer(redmine_url + '/cable');
 
 					this.cable.subscriptions.create({
-						channel: 'RedmineRt::UsersChannel',
-						user_login: user_login
+						channel: 'RedmineRt::Channel',
+						name: "user:" + user_login
 					}, 
 					{
 						received: event_handler
@@ -28,7 +28,7 @@
 					console.log("Opening websocket-rails connection. redmine_url=" + redmine_url);
 					var host = redmine_url.split("//")[1];
 					this.dispatcher = new WebSocketRails(host + '/websocket');
-					var private_channel = this.dispatcher.subscribe_private("user:" + user_login + ':messages',
+					var private_channel = this.dispatcher.subscribe_private("user:" + user_login,
 						function(current_user) {
 							//console.log(current_user.name + " has joined the channel");
 							private_channel.bind('ALL', event_handler);

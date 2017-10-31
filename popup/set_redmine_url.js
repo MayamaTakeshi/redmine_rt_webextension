@@ -10,5 +10,6 @@ document.getElementById("set_redmine_url").addEventListener('click', function(e)
 		var state = page.get_state();
 		state.redmine_url = redmine_url;
 		page.set_state(state);
+		document.location = chrome.extension.getURL("popup/login.html");
 	});
 });

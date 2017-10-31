@@ -40,7 +40,7 @@ var msg_handler = (msg) => {
 	}
 };
 
-var startup = () => {
+var startup = (redmine_url) => {
 	console.log("background.js startup")
 	if(chan) {
 		chan.shutdown();
@@ -56,10 +56,10 @@ var startup = () => {
 				console.log("success");
 				var json = JSON.parse(this.responseText);
 				if(json.user != "") {
-					chan = RedmineChannels.setup(json.ws_mode, json.user, state.redmine_url, msg_handler);		
-					state = {"name": "loggedin", "user": json.user, "redmine_url": state.redmine_url}
+					chan = RedmineChannels.setup(json.ws_mode, json.user, redmine_url, msg_handler);		
+					state = {"name": "loggedin", "user": json.user, "redmine_url": redmine_url}
 				} else {
-					state = {"name": "loggedout", "user": "", "redmine_url": state.redmine_url}
+					state = {"name": "loggedout", "user": "", "redmine_url": redmine_url}
 				}
 			} else {
 				console.log("failed. starting timeout for retry");
@@ -77,7 +77,7 @@ browser.storage.local.get('redmine_url').then(
 	console.dir(val);
 	if(val.redmine_url && val.redmine_url != "") {
 		state.redmine_url = val.redmine_url;
-		startup();
+		startup(state.redmine_url);
 	}
 });
 
@@ -100,7 +100,7 @@ function set_state(new_state) {
 
 	if(state.name == "loggedin") {
 		console.log("starting up");
-		startup();
+		startup(state.redmine_url);
 	}
 }
 

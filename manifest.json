@@ -30,13 +30,6 @@
 		"default_popup": "popup/main.html"
 	},
 
-	"sidebar_action": {
-		"default_icon": "icons/redmine-32.png",
-		"default_title": "redmine_rt",
-		"default_panel": "sidebar/panel.html"
-	},
-
-
 	"background": {
 		"scripts": [
 			"third_party/browser-polyfill.js",
