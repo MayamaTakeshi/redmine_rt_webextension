@@ -52,7 +52,7 @@
 			shutdown: function() {
 				this.active = false;
 				if(this.ws_mode == 'actioncable') {
-					this.cable.close();
+					this.cable.disconnect();
 				} else {
 					this.dispatcher.disconnect();
 				}

@@ -96,12 +96,19 @@ function set_state(new_state) {
 		console.log("no change in state");
 		return;
 	}
-	state = new_state;
+	state.name = new_state.name;
+	state.redmine_url = new_state.redmine_url;
+	state.user = new_state.user;
 
 	if(state.name == "loggedin") {
 		console.log("starting up");
 		startup(state.redmine_url);
-	}
+	} else if(state.name == "loggedout") {
+		if(chan) {
+			chan.shutdown();
+			chan = null;
+		}
+  }
 }
 
 browser.runtime.onMessage.addListener(msg_handler);

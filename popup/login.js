@@ -1,9 +1,14 @@
 
 console.log("popup/login.js");
 var redmine_url;
+var user; 
 
 browser.runtime.getBackgroundPage().then((page) => {
-	redmine_url = page.get_state().redmine_url;
+	var state = page.get_state();
+	redmine_url = state.redmine_url;
+	user = state.user;
+	
+	document.getElementById("username").innerHTML = user;
 });
 
 document.getElementById("login").addEventListener('click', function(e) {
