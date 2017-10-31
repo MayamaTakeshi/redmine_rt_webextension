@@ -3,7 +3,16 @@ console.log("popup/login.js");
 var redmine_url;
 var user; 
 
-browser.runtime.getBackgroundPage().then((page) => {
+var getBackgroundPage = (handler) => {
+	if(typeof browser == 'undefined') {
+		chrome.runtime.getBackgroundPage(handler);
+	} else {
+		browser.runtime.getBackgroundPage().then(handler);
+	}
+};
+
+
+getBackgroundPage((page) => {
 	var state = page.get_state();
 	redmine_url = state.redmine_url;
 	user = state.user;
@@ -29,7 +38,7 @@ document.getElementById("login").addEventListener('click', function(e) {
 			if (this.readyState == 4) {
 				if(this.status == 200) {
 					console.log("OK.");
-					browser.runtime.getBackgroundPage().then((page) => {
+					getBackgroundPage((page) => {
 						var new_state = {
 							name: "loggedin",
 							user: username,

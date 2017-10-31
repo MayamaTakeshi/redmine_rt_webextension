@@ -1,7 +1,16 @@
 
 console.log("popup/main.js");
-browser.runtime.getBackgroundPage().then((page) => {
-	console.log("get_state got");
+
+var getBackgroundPage = (handler) => {
+	if(typeof browser == 'undefined') {
+		chrome.runtime.getBackgroundPage(handler);
+	} else {
+		browser.runtime.getBackgroundPage().then(handler);
+	}
+};
+
+
+getBackgroundPage((page) => {
 	var state = page.get_state();
 
 	var url;
@@ -15,3 +24,4 @@ browser.runtime.getBackgroundPage().then((page) => {
 	}
 	document.location = url;
 });
+
