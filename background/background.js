@@ -1,11 +1,6 @@
-var redmine_url;
 var chan;
 
-var state = {"name": "loggedout", "user": ""};
-
-function get_state() {
-	return state;
-}
+var state = {"name": "loggedout", "user": "", "redmine_url": ""};
 
 var msg_handler = (msg) => {
 	console.log("background.js got message");
@@ -46,6 +41,7 @@ var msg_handler = (msg) => {
 };
 
 var startup = () => {
+	console.log("background.js startup")
 	if(chan) {
 		chan.shutdown();
 	}
@@ -55,21 +51,22 @@ var startup = () => {
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if (this.readyState == 4) {
+			console.log(this.status);
 			if(this.status == 200) {
 				console.log("success");
 				var json = JSON.parse(this.responseText);
 				if(json.user != "") {
-					chan = RedmineChannels.setup(json.ws_mode, json.user, redmine_url, msg_handler);		
-					state = {"name": "loggedin", "user": json.user}
+					chan = RedmineChannels.setup(json.ws_mode, json.user, state.redmine_url, msg_handler);		
+					state = {"name": "loggedin", "user": json.user, "redmine_url": state.redmine_url}
 				} else {
-					state = {"name": "loggedout", "user": ""}
+					state = {"name": "loggedout", "user": "", "redmine_url": state.redmine_url}
 				}
 			} else {
 				console.log("failed. starting timeout for retry");
 			}
 		}
 	};
-	xhr.open("GET", redmine_url + "/channels/session_info", true);
+	xhr.open("GET", state.redmine_url + "/channels/session_info", true);
 	xhr.withCredentials = true;
 	xhr.send();
 };
@@ -79,9 +76,32 @@ browser.storage.local.get('redmine_url').then(
 	console.log("redmine_url from storage.local:");
 	console.dir(val);
 	if(val.redmine_url && val.redmine_url != "") {
-		redmine_url = val.redmine_url;
+		state.redmine_url = val.redmine_url;
 		startup();
 	}
 });
+
+
+function get_state() {
+	return state;
+}
+
+function set_state(new_state) {
+	console.log("set_state");
+	console.dir(state);
+	console.dir(new_state);
+	if(state.name == new_state.name 
+	&& state.user == new_state.user 
+	&& state.redmine_url == new_state.redmine_url) {
+		console.log("no change in state");
+		return;
+	}
+	state = new_state;
+
+	if(state.name == "loggedin") {
+		console.log("starting up");
+		startup();
+	}
+}
 
 browser.runtime.onMessage.addListener(msg_handler);
