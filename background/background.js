@@ -73,8 +73,9 @@ var startup = (redmine_url) => {
 
 browser.storage.local.get('redmine_url').then(
 	(val) => {
-	console.log("redmine_url from storage.local:");
+	console.log("Data from storage.local:");
 	console.dir(val);
+	state.user = val.user;
 	if(val.redmine_url && val.redmine_url != "") {
 		state.redmine_url = val.redmine_url;
 		startup(state.redmine_url);

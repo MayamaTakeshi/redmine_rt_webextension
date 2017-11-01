@@ -1,45 +1,41 @@
+var redmine_url;
+var user;
+
+browser.runtime.getBackgroundPage().then((page) => {
+	var state = page.get_state();
+	redmine_url = state.redmine_url;
+	user = state.user;
+
+	document.getElementById("redmine_url").value = redmine_url;
+});
+
+
 function saveOptions(e) {
 	console.log("saveOptions");
 	e.preventDefault();
   var redmine_url = document.getElementById("redmine_url").value;
 
-	if(typeof browser != 'undefined') {
-		browser.runtime.sendMessage(
-			{
-				type: 'redmine_url_updated',
-				value: redmine_url
-			}
-		);
+	browser.storage.local.set({
+		redmine_url: redmine_url,
+		user: user,
+	});
 
-		browser.storage.local.set({
-			redmine_url: redmine_url
-		});
+	browser.runtime.getBackgroundPage().then((page) => {
+		var state = page.get_state();
+		var new_state = {
+			name: state.name,
+			user: state.user,
+			redmine_url: redmine_url,
+		}
+		page.set_state(new_state);
+	});
 
-		browser.storage.local.get('redmine_url').then((res) => {
-			console.dir(res);
-		});
-
-	} else {
-		chrome.runtime.sendMessage(
-			{
-				type: 'redmine_url_updated',
-				value: redmine_url
-			}
-		);
-
-		chrome.storage.sync.set({
-			redmine_url: redmine_url
-		},
-		function() {
-			console.log("options save success");
-		});
-
-	  chrome.storage.local.get('redmine_url', console.dir);
-	}
+	document.getElementById("success").innerHTML = "Saved";
 }
 
 function restoreOptions() {
 	console.log("restoreOptions");
+
 	function setRedmineUrl(result) {
 		console.log("setRedmineUrl");
 		console.dir(result);
@@ -50,12 +46,8 @@ function restoreOptions() {
 		console.log(`Error: ${error}`);
 	}
 
-	if(typeof browser != 'undefined') {
-		var getting = browser.storage.local.get("redmine_url");
-		getting.then(setRedmineUrl, onError);
-	} else {
-		chrome.storage.sync.get("redmine_url", setRedmineUrl);
-	}
+	var getting = browser.storage.local.get();
+	getting.then(setRedmineUrl, onError);
 
 }
 

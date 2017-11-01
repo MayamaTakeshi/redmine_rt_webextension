@@ -5,10 +5,11 @@ var user;
 
 browser.runtime.getBackgroundPage().then((page) => {
 	var state = page.get_state();
+	console.dir(state);
 	redmine_url = state.redmine_url;
 	user = state.user;
-	
-	document.getElementById("username").innerHTML = user;
+
+	document.getElementById("username").value = user ? user : "";
 });
 
 document.getElementById("login").addEventListener('click', function(e) {
@@ -22,9 +23,9 @@ document.getElementById("login").addEventListener('click', function(e) {
 	var username = document.getElementById("username").value;
 	var password = document.getElementById("password").value;
   
-	var xhttp = new XMLHttpRequest();
+	var xhr = new XMLHttpRequest();
 
-		xhttp.onreadystatechange = function() {
+		xhr.onreadystatechange = function() {
       console.log("login status=" + this.status);
 			if (this.readyState == 4) {
 				if(this.status == 200) {
@@ -41,16 +42,23 @@ document.getElementById("login").addEventListener('click', function(e) {
 					});
 				} else if(this.status == 0) {
 					console.log("failed to contact server.");
-					document.getElementById("error").innerHTML = "Failure to contact server";
+					document.getElementById("error").innerHTML = "Failure to contact server at redmine_url " + redmine_url;
 				} else {
 					console.log("failed.");
 					document.getElementById("error").innerHTML = "Invalid credentials";
 				}
 			}
 		};
-		xhttp.open("POST", redmine_url + "/login.json", true);
-		xhttp.setRequestHeader("Content-Type", "application/json");
-		xhttp.withCredentials = true;
-		xhttp.send(JSON.stringify({username: username, password: password, autologin: 1}));
+
+		xhr.onerror = function(e) {
+			console.log("onerror");
+			console.dir(e);
+			document.getElementById("error").innerHTML = "Failed to contact server at redmine_url " + redmine_url;
+		};
+
+		xhr.open("POST", redmine_url + "/login.json", true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.withCredentials = true;
+		xhr.send(JSON.stringify({username: username, password: password, autologin: 1}));
 	}	
 );

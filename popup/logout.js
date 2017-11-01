@@ -16,9 +16,9 @@ document.getElementById("logout").addEventListener('click', function(e) {
 	console.log("logout clicked");
 	console.dir(e);
 
-	var xhttp = new XMLHttpRequest();
+	var xhr = new XMLHttpRequest();
 
-		xhttp.onreadystatechange = function() {
+		xhr.onreadystatechange = function() {
       console.log("logout status=" + this.status);
 			if (this.readyState == 4) {
 				if(this.status == 200) {
@@ -34,11 +34,20 @@ document.getElementById("logout").addEventListener('click', function(e) {
 					});
 				} else {
 					console.log("failed.");
+					console.dir(this);
+					document.getElementById("error").innerHTML = "Error: failed to log out";
 				}
 			}
 		};
-		xhttp.open("GET", redmine_url + "/logout", true);
-		xhttp.withCredentials = true;
-		xhttp.send();
+
+		xhr.onerror = function(e) {
+			console.log("onerror");
+			console.dir(e);
+			document.getElementById("error").innerHTML = "Error: failed to contact server at redmine_url " + redmine_url;
+		};
+
+		xhr.open("GET", redmine_url + "/logout", true);
+		xhr.withCredentials = true;
+		xhr.send();
 	}	
 );
