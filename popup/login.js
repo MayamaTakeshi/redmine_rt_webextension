@@ -3,16 +3,7 @@ console.log("popup/login.js");
 var redmine_url;
 var user; 
 
-var getBackgroundPage = (handler) => {
-	if(typeof browser == 'undefined') {
-		chrome.runtime.getBackgroundPage(handler);
-	} else {
-		browser.runtime.getBackgroundPage().then(handler);
-	}
-};
-
-
-getBackgroundPage((page) => {
+browser.runtime.getBackgroundPage().then((page) => {
 	var state = page.get_state();
 	redmine_url = state.redmine_url;
 	user = state.user;
@@ -38,18 +29,22 @@ document.getElementById("login").addEventListener('click', function(e) {
 			if (this.readyState == 4) {
 				if(this.status == 200) {
 					console.log("OK.");
-					getBackgroundPage((page) => {
+					browser.runtime.getBackgroundPage().then((page) => {
 						var new_state = {
 							name: "loggedin",
 							user: username,
 							redmine_url: redmine_url
 						}
 						page.set_state(new_state);
-					});
 
-					document.location = chrome.extension.getURL("popup/logout.html");
+						document.location = chrome.extension.getURL("popup/logout.html");
+					});
+				} else if(this.status == 0) {
+					console.log("failed to contact server.");
+					document.getElementById("error").innerHTML = "Failure to contact server";
 				} else {
 					console.log("failed.");
+					document.getElementById("error").innerHTML = "Invalid credentials";
 				}
 			}
 		};

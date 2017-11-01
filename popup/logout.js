@@ -3,16 +3,7 @@ console.log("popup/logout.js");
 var redmine_url;
 var user; 
 
-var getBackgroundPage = (handler) => {
-	if(typeof browser == 'undefined') {
-		chrome.runtime.getBackgroundPage(handler);
-	} else {
-		browser.runtime.getBackgroundPage().then(handler);
-	}
-};
-
-
-getBackgroundPage((page) => {
+browser.runtime.getBackgroundPage().then((page) => {
 	var state = page.get_state();
 	redmine_url = state.redmine_url;
 	user = state.user;
@@ -32,7 +23,7 @@ document.getElementById("logout").addEventListener('click', function(e) {
 			if (this.readyState == 4) {
 				if(this.status == 200) {
 					console.log("Logout OK.");
-					getBackgroundPage((page) => {
+					browser.runtime.getBackgroundPage().then((page) => {
 						var new_state = {
 							user: user,
 							redmine_url: redmine_url,
