@@ -26,8 +26,18 @@
 					});
 				} else {
 					console.log("Opening websocket-rails connection. redmine_url=" + redmine_url);
-					var host = redmine_url.split("//")[1];
-					this.dispatcher = new WebSocketRails(host + '/websocket');
+					var arr = redmine_url.split("//");
+					var scheme = arr[0];
+					var host = arr[1];
+					var url = "ws://";
+					if(scheme == "https:") {
+						url = "wss://";
+					}
+
+					url = url + host + '/websocket';
+					console.log("url=" + url);
+
+					this.dispatcher = new WebSocketRails(url);
 					var private_channel = this.dispatcher.subscribe_private("user:" + user_login,
 						function(current_user) {
 							//console.log(current_user.name + " has joined the channel");
