@@ -14,6 +14,9 @@ function saveOptions(e) {
 	console.log("saveOptions");
 	e.preventDefault();
   var redmine_url = document.getElementById("redmine_url").value;
+	if(redmine_url.endsWith("/")) {
+		redmine_url = redmine_url.slice(0, - 1);
+	}
 
 	browser.storage.local.set({
 		redmine_url: redmine_url,
@@ -31,6 +34,7 @@ function saveOptions(e) {
 	});
 
 	document.getElementById("success").innerHTML = "Saved";
+	document.getElementById("redmine_url").value = redmine_url;
 }
 
 function restoreOptions() {
