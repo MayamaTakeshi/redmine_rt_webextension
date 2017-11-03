@@ -17,8 +17,8 @@ var msg_handler = (msg) => {
 			console.dir(tabs);
 			for(var i=0; i<tabs.length ; ++i) {
 				var tab = tabs[i];
-				console.log(tab.url, msg.url);
-				if (tab.url.startsWith(msg.url)) {
+				console.log(tab.url, msg.data.url);
+				if (tab.url.startsWith(msg.data.url)) {
 					console.log("found existing tab")
 					found_tab = tab;
 					break;
@@ -30,13 +30,22 @@ var msg_handler = (msg) => {
 					active: true
 				});
 			} else {
-				console.log("no existing tab for " + msg.url + " . Creating it")
+				console.log("no existing tab for " + msg.data.url + " . Creating it")
 				browser.tabs.create({
 					active: true,
-					url: msg.url
+					url: msg.data.url
 				});
 			}
 		})
+	} else if(msg.command == "show_notification") {
+		browser.notifications.create(null, {
+			"type": msg.data.imageUrl ? "image" : "basic",
+			"iconUrl": msg.data.iconUrl || browser.extension.getURL("icons/redmine-96.png"),
+			"imageUrl": msg.data.imageUrl,
+			"title": msg.data.title,
+			"message": msg.data.message
+		})
+		console.log("notification created");
 	}
 };
 
@@ -100,6 +109,11 @@ function set_state(new_state) {
 	state.name = new_state.name;
 	state.redmine_url = new_state.redmine_url;
 	state.user = new_state.user;
+
+	browser.storage.local.set({
+		redmine_url: state.redmine_url,
+		user: state.user,
+	});
 
 	if(state.name == "loggedin") {
 		console.log("starting up");

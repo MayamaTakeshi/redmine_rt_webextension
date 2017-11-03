@@ -24,6 +24,15 @@
 					{
 						received: event_handler
 					});
+
+					this.cable.subscriptions.create({
+						channel: 'RedmineRt::Channel',
+						name: "general"
+					}, 
+					{
+						received: event_handler
+					});
+
 				} else {
 					console.log("Opening websocket-rails connection. redmine_url=" + redmine_url);
 					var arr = redmine_url.split("//");
@@ -40,8 +49,17 @@
 					this.dispatcher = new WebSocketRails(url);
 					var private_channel = this.dispatcher.subscribe_private("user:" + user_login,
 						function(current_user) {
-							//console.log(current_user.name + " has joined the channel");
 							private_channel.bind('ALL', event_handler);
+						},
+						function(reason) {
+							console.log("Could not connect to channel");       
+							event_handler(reason);
+						}
+					);
+
+					var private_channel_general = this.dispatcher.subscribe_private("general",
+						function(current_user) {
+							private_channel_general.bind('ALL', event_handler);
 						},
 						function(reason) {
 							console.log("Could not connect to channel");       

@@ -3,14 +3,13 @@
 	"name": "redmine_rt",
 	"version": "1.0",
 
-  "description": "Connects to Redmine server using WebSocket and send/receive messages",
+  "description": "Connects to redmine_rt plugin using WebSocket for CTI features (ticket popup)",
 	"icons": {
 		"48": "icons/redmine-48.png"
 	},
 
 	"options_ui": {
-		"page": "options/options.html",
-    "browser_style": true
+		"page": "options/options.html"
 	},
 
 	"permissions": [

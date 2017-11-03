@@ -18,11 +18,6 @@ function saveOptions(e) {
 		redmine_url = redmine_url.slice(0, - 1);
 	}
 
-	browser.storage.local.set({
-		redmine_url: redmine_url,
-		user: user,
-	});
-
 	browser.runtime.getBackgroundPage().then((page) => {
 		var state = page.get_state();
 		var new_state = {
