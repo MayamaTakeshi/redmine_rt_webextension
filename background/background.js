@@ -53,6 +53,7 @@ var startup = (redmine_url) => {
 	console.log("background.js startup")
 	if(chan) {
 		chan.shutdown();
+		chan = null;
 	}
 
 	console.log("startup");
