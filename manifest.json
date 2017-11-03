@@ -3,7 +3,7 @@
 	"name": "redmine_rt",
 	"version": "1.0",
 
-  "description": "Connects to redmine_rt plugin using WebSocket for CTI features (ticket popup)",
+  "description": "Connects to redmine_rt plugin using WebSocket for CTI features (issue popup and notifications)",
 	"icons": {
 		"48": "icons/redmine-48.png"
 	},
