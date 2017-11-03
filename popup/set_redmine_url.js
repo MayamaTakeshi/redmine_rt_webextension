@@ -10,7 +10,7 @@ document.getElementById("set_redmine_url").addEventListener('click', function(e)
 	}
 
 	if(!redmine_url.startsWith("http://") && !redmine_url.startsWith("https://")) {
-		document.getElementById("error").innerHTML = "Invalid redmine_url. Must start with http:// or https://";
+		document.getElementById("error").textContent = "Invalid redmine_url. Must start with http:// or https://";
 		return;
 	}
 

@@ -42,10 +42,10 @@ document.getElementById("login").addEventListener('click', function(e) {
 					});
 				} else if(this.status == 0) {
 					console.log("failed to contact server.");
-					document.getElementById("error").innerHTML = "Failure to contact server at redmine_url " + redmine_url;
+					document.getElementById("error").textContent = "Failure to contact server at redmine_url " + redmine_url;
 				} else {
 					console.log("failed.");
-					document.getElementById("error").innerHTML = "Invalid credentials";
+					document.getElementById("error").textContent = "Invalid credentials";
 				}
 			}
 		};
@@ -53,7 +53,7 @@ document.getElementById("login").addEventListener('click', function(e) {
 		xhr.onerror = function(e) {
 			console.log("onerror");
 			console.dir(e);
-			document.getElementById("error").innerHTML = "Failed to contact server at redmine_url " + redmine_url;
+			document.getElementById("error").textContent = "Failed to contact server at redmine_url " + redmine_url;
 		};
 
 		xhr.open("POST", redmine_url + "/login.json", true);

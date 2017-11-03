@@ -8,7 +8,7 @@ browser.runtime.getBackgroundPage().then((page) => {
 	redmine_url = state.redmine_url;
 	user = state.user;
 	
-	document.getElementById("username").innerHTML = user;
+	document.getElementById("username").value = user;
 });
 
 
@@ -35,7 +35,7 @@ document.getElementById("logout").addEventListener('click', function(e) {
 				} else {
 					console.log("failed.");
 					console.dir(this);
-					document.getElementById("error").innerHTML = "Error: failed to log out";
+					document.getElementById("error").textContent = "Error: failed to log out";
 				}
 			}
 		};
@@ -43,7 +43,7 @@ document.getElementById("logout").addEventListener('click', function(e) {
 		xhr.onerror = function(e) {
 			console.log("onerror");
 			console.dir(e);
-			document.getElementById("error").innerHTML = "Error: failed to contact server at redmine_url " + redmine_url;
+			document.getElementById("error").textContent = "Error: failed to contact server at redmine_url " + redmine_url;
 		};
 
 		xhr.open("GET", redmine_url + "/logout", true);
