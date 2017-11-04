@@ -2,13 +2,21 @@ var chan;
 
 var state = {"name": "loggedout", "user": "", "redmine_url": ""};
 
-var msg_handler = (msg) => {
-	console.log("background.js got message");
-	console.dir(msg);
+var notification_id = 0;
+var notification_buttons = {};
 
-	if(msg.command == "open_url") {
+var browser_name;
+
+browser.runtime.getBrowserInfo().then((info) => {
+	console.log("browser name: " + info.name);
+	browser_name = info.name;
+});
+
+var process_command = (command, data) => {
+	console.log("process_command " + command);
+	console.dir(data);
+	if(command == "open_url") {
 		browser.tabs.query({
-			//url: msg.url
 			currentWindow: true
 		}).then((tabs) => {
 			var found_tab = null;
@@ -17,8 +25,8 @@ var msg_handler = (msg) => {
 			console.dir(tabs);
 			for(var i=0; i<tabs.length ; ++i) {
 				var tab = tabs[i];
-				console.log(tab.url, msg.data.url);
-				if (tab.url.startsWith(msg.data.url)) {
+				console.log(tab.url, data.url);
+				if (tab.url.startsWith(data.url)) {
 					console.log("found existing tab")
 					found_tab = tab;
 					break;
@@ -30,22 +38,59 @@ var msg_handler = (msg) => {
 					active: true
 				});
 			} else {
-				console.log("no existing tab for " + msg.data.url + " . Creating it")
+				console.log("no existing tab for " + data.url + " . Creating it")
 				browser.tabs.create({
 					active: true,
-					url: msg.data.url
+					url: data.url
 				});
 			}
 		})
-	} else if(msg.command == "show_notification") {
-		browser.notifications.create(null, {
-			"type": msg.data.imageUrl ? "image" : "basic",
-			"iconUrl": msg.data.iconUrl || browser.extension.getURL("icons/redmine-96.png"),
-			"imageUrl": msg.data.imageUrl,
-			"title": msg.data.title,
-			"message": msg.data.message
-		})
+	} else if(command == "show_notification") {
+		notification_id++;
+
+		var buttons = null;
+
+		if(data.buttons) {
+			notification_buttons[String(notification_id)] = data.buttons;
+
+			var buttons = data.buttons.map((b) => {
+				return {"title": b.title}
+			});
+		}
+
+		var notification_data = {
+			"type": data.imageUrl ? "image" : "basic",
+			"iconUrl": data.iconUrl || browser.extension.getURL("icons/redmine-96.png"),
+			"imageUrl": data.imageUrl,
+			"title": data.title,
+			"message": data.message,
+		}
+		if(browser_name != "Firefox") {
+			notification_data["buttons"] = buttons;
+		}
+
+		browser.notifications.create(String(notification_id), notification_data);
+
 		console.log("notification created");
+	} 
+}
+
+browser.notifications.onButtonClicked.addListener((id, index) => {
+	browser.notifications.clear(id);
+	process_command(notification_buttons[id][index].command, notification_buttons[id][index].data);
+});
+
+browser.notifications.onClosed.addListener((id, byUser) => {
+	delete notification_buttons[id];
+});
+
+
+var msg_handler = (msg) => {
+	console.log("background.js got message");
+	console.dir(msg);
+
+	if(msg.command) {
+		process_command(msg.command, msg.data);
 	}
 };
 
