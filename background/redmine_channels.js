@@ -93,8 +93,10 @@
 				this.active = false;
 				if(this.ws_mode == 'actioncable') {
 					this.cable.disconnect();
+					delete this.cable;
 				} else {
 					this.dispatcher.disconnect();
+					delete this.dispatcher
 				}
 			}
 		};
