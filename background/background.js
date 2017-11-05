@@ -7,10 +7,12 @@ var notification_buttons = {};
 
 var browser_name;
 
-browser.runtime.getBrowserInfo().then((info) => {
-	console.log("browser name: " + info.name);
-	browser_name = info.name;
-});
+if(browser.runtime.getBrowserInfo) {
+	browser.runtime.getBrowserInfo().then((info) => {
+		console.log("browser name: " + info.name);
+		browser_name = info.name;
+	});
+}
 
 var process_command = (command, data) => {
 	console.log("process_command " + command);
@@ -72,7 +74,20 @@ var process_command = (command, data) => {
 		browser.notifications.create(String(notification_id), notification_data);
 
 		console.log("notification created");
-	} 
+	} else if(command == "post_msg") {
+		if(chan.ws_mode == 'actioncable') {
+			chan.post_msg(data.channel_name, data.msg);
+		} else {
+			chan.post_msg(data.channel_name, data.msg);
+			return;
+
+			//Workaround problem to post messages using Websocket-Rails
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", state.redmine_url + "/channels/" + data.channel_name + "/post_msg_by_session.json", true);
+			xhr.withCredentials = true;
+			xhr.send(JSON.stringify(data.msg));
+		}
+	}
 }
 
 browser.notifications.onButtonClicked.addListener((id, index) => {

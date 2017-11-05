@@ -3,6 +3,8 @@
 
 	RedmineChannels.setup = function(ws_mode, user_login, redmine_url, event_handler) {
 		console.log("RedmineChannels.setup");
+		var channel_names = ['user:' + user_login, 'general'];
+
 		var obj = {
 			ws_mode: ws_mode,
 			user_login: user_login,
@@ -17,20 +19,16 @@
 					console.log("Opening actioncable connection. redmine_url=" + redmine_url);
 					this.cable = ActionCable.createConsumer(redmine_url + '/cable');
 
-					this.cable.subscriptions.create({
-						channel: 'RedmineRt::Channel',
-						name: "user:" + user_login
-					}, 
-					{
-						received: event_handler
-					});
+					this.channels = {};
 
-					this.cable.subscriptions.create({
-						channel: 'RedmineRt::Channel',
-						name: "general"
-					}, 
-					{
-						received: event_handler
+					channel_names.forEach((channel_name) => {
+						this.channels[channel_name] = this.cable.subscriptions.create({
+							channel: 'RedmineRt::Channel',
+							name: channel_name
+						},
+						{
+							received: event_handler
+						});
 					});
 
 				} else {
@@ -47,25 +45,18 @@
 					console.log("url=" + url);
 
 					this.dispatcher = new WebSocketRails(url);
-					var private_channel = this.dispatcher.subscribe_private("user:" + user_login,
-						function(current_user) {
-							private_channel.bind('ALL', event_handler);
-						},
-						function(reason) {
-							console.log("Could not connect to channel");       
-							event_handler(reason);
-						}
-					);
 
-					var private_channel_general = this.dispatcher.subscribe_private("general",
-						function(current_user) {
-							private_channel_general.bind('ALL', event_handler);
-						},
-						function(reason) {
-							console.log("Could not connect to channel");       
-							event_handler(reason);
-						}
-					);
+					channel_names.forEach((channel_name) => {
+						var private_channel = this.dispatcher.subscribe_private(channel_name,
+							function(current_user) {
+								private_channel.bind('ALL', event_handler);
+							},
+							function(reason) {
+								console.log("Could not connect to channel");       
+								event_handler(reason);
+							}
+						);
+					});
 
 					this.dispatcher.bind('connection_closed', function() {
 						console.log("websocket-rails connection closed");
@@ -73,6 +64,27 @@
 						setTimeout(function () { 
 							self.start()
 						}, 2000);
+					});
+				}
+			},
+
+			post_msg: function(channel_name, msg) {
+				if(this.ws_mode == 'actioncable') {
+					if(!this.cable) return;
+					console.log("post_msg via actioncable");
+					this.channels["general"].send({
+						command: "send_msg",
+						data: {
+							channel_name: channel_name,
+							msg: msg
+						}
+					});
+				} else {
+					if(!this.dispatcher) return;
+					console.log("post_msg via websocket-rails");
+					this.dispatcher.trigger("post_msg", {
+						channel_name: channel_name,
+						msg: msg
 					});
 				}
 			},
