@@ -11,3 +11,8 @@ Then when a call is anwsered, the Redmine ticket associated with that call can b
 
 
 
+#Attribution
+
+This application uses this sound from freesound:
+Ping.wav by edsward ( https://freesound.org/people/edsward/ )
+

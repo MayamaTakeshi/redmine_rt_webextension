@@ -1,5 +1,9 @@
 var chan;
 
+var tone = document.getElementById("notification_tone");
+tone.setAttribute('src', browser.extension.getURL("audio/341871__edsward__ping.ogg"));
+tone.load(); 
+
 var state = {"name": "loggedout", "user": "", "redmine_url": ""};
 
 var notification_id = 0;
@@ -74,12 +78,16 @@ var process_command = (command, data) => {
 		browser.notifications.create(String(notification_id), notification_data);
 
 		console.log("notification created");
+
+		tone.currentTime = 0;
+		tone.play();
+
 	} else if(command == "post_msg") {
 		if(chan.ws_mode == 'actioncable') {
 			chan.post_msg(data.channel_name, data.msg);
 		} else {
-			chan.post_msg(data.channel_name, data.msg);
-			return;
+			//chan.post_msg(data.channel_name, data.msg);
+			//return;
 
 			//Workaround problem to post messages using Websocket-Rails
 			var xhr = new XMLHttpRequest();
