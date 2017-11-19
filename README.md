@@ -36,8 +36,9 @@ issues/ISSUE_NUMBER"}}'
 ```
 
 2) to show a notification to all users:
-
+```
 curl -u YOUR_API_TOKEN:void https://REDMINE_SERVER/channels/general/post_msg.json -X POST -H 'Content-Type: application/json' -d '{"command": "show_notification", "data": {"title": "Call from Pablo Picasso", "message": "Impatient customer. Hurry up!", "imageUrl": "https://cdn.dribbble.com/users/4385/screenshots/344648/picasso_icon.jpg"}}'
+```
 
 3) to show a notification with buttons and actions to a specific user:
 ```
@@ -46,7 +47,6 @@ curl -u YOUR_API_TOKEN:void https://REDMINE_SERVER/channels/user:USERNAME/post_m
 (However, imageUrl and buttons are not supported yet by firefox. The notification will show up but the image and the buttons will not be rendered)
 
 4) to show a notification with a button allowing to answer an incoming call:
-
 ```
 curl -u YOUR_API_TOKEN:void https://REDMINE_SERVER/channels/user:USERNAME/post_msg.json -d '{"command": "show_notification", "data": {"title": "Call from Pablo Picasso", "message": "Impatient customer. Hurry up!", "imageUrl": "https://cdn.dribbble.com/users/4385/screenshots/344648/picasso_icon.jpg", "buttons": [{"title": "Answer call", "command": "post_msg", "data": {"channel_name": "pbx", "msg": {"command": "answer", "data": {"call_uuid": "SOME_CALL_UUID"}}}}]}}'
 
