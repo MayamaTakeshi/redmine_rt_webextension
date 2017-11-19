@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "redmine_rt",
-	"version": "1.0",
+	"version": "1.1",
 
   "description": "Connects to redmine_rt plugin using WebSocket for CTI features (issue popup and notifications)",
 	"icons": {
