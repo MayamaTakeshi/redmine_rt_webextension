@@ -9,9 +9,11 @@ For example, when a call arrives, the identity of the caller can be shown as a n
 
 Then when a call is anwsered, the Redmine ticket associated with that call can be opened in the browser.
 
+Video demonstration:
 
+https://www.youtube.com/watch?v=XiHFAhs5o5M&feature=youtu.be
 
-#Attribution
+Attribution:
 
 This application uses this sound from freesound:
 Ping.wav by edsward ( https://freesound.org/people/edsward/ )
