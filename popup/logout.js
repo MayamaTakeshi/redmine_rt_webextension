@@ -8,7 +8,7 @@ browser.runtime.getBackgroundPage().then((page) => {
 	redmine_url = state.redmine_url;
 	user = state.user;
 	
-	document.getElementById("username").value = user;
+	document.getElementById("username").textContent = user;
 });
 
 
@@ -19,7 +19,7 @@ document.getElementById("logout").addEventListener('click', function(e) {
 	var xhr = new XMLHttpRequest();
 
 		xhr.onreadystatechange = function() {
-      console.log("logout status=" + this.status);
+		console.log("logout status=" + this.status);
 			if (this.readyState == 4) {
 				if(this.status == 200) {
 					console.log("Logout OK.");

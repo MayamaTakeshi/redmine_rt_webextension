@@ -1,7 +1,7 @@
 # redmine_rt_webextension
 Browser webextension to be used with redmine_rt plugin (https://github.com/MayamaTakeshi/redmine_rt).
 
-This webextension permit to connect to redmine_rt using WebSockets and get events from it.
+This webextension connects to redmine_rt using WebSockets and get events from it.
 
 This can be used for CTI (integration with telephony systems like PBXes). 
 
