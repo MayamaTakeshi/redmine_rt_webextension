@@ -65,11 +65,11 @@ var process_command = (command, data) => {
 		}
 
 		var notification_data = {
-			"type": data.imageUrl ? "image" : "basic",
-			"iconUrl": data.iconUrl || browser.extension.getURL("icons/redmine-96.png"),
-			"imageUrl": data.imageUrl,
+			"type": "basic",
+			"iconUrl": data.iconUrl || browser.extension.getURL("icons/redmine-32.png"),
 			"title": data.title,
 			"message": data.message,
+			"requireInteraction": true,
 		}
 		if(browser_name != "Firefox") {
 			notification_data["buttons"] = buttons;
@@ -78,6 +78,7 @@ var process_command = (command, data) => {
 		browser.notifications.create(String(notification_id), notification_data);
 
 		console.log("notification created");
+		console.log(notification_data);
 
 		tone.currentTime = 0;
 		tone.play();

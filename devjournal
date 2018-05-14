@@ -57,4 +57,20 @@ or:
   {"ws_mode":"actioncable|websocket-rails","user":""}
 if there is no valid session cookie
 
+======================================================
+2018/05/15 takeshi:
+
+Testing on Chrome Version 66.0.3359.139 (Official Build) (64-bit), some options to notifications.create were not working:
+  - iconUrl (instead, chrome icon showed up in the notification)
+  - imageUrl (no image showed up)
+
+Checking docs:
+  https://developer.chrome.com/extensions/notifications#type-NotificationOptions
+imageUrl was deprecated.
+But iconUrl should have worked.
+
+Obs: about buttons, this chrome version requires to hover over the notification panel for for the buttons to show up. Also hovering out of the panel after hovering in would cause the panel to close.
+
+However, by setting option "requireInteraction" to true, the buttons became visible without need to hovering in and the panel was not dismissed by hovering out.
+
 
