@@ -59,7 +59,7 @@ var process_command = (command, data) => {
 		if(data.buttons) {
 			notification_buttons[String(notification_id)] = data.buttons;
 
-			var buttons = data.buttons.map((b) => {
+			buttons = data.buttons.map((b) => {
 				return {"title": b.title}
 			});
 		}
@@ -69,10 +69,14 @@ var process_command = (command, data) => {
 			"iconUrl": data.iconUrl || browser.extension.getURL("icons/redmine-32.png"),
 			"title": data.title,
 			"message": data.message,
-			"requireInteraction": true,
 		}
+
 		if(browser_name != "Firefox") {
-			notification_data["buttons"] = buttons;
+			notification_data["requireInteraction"] = true;
+
+			if(buttons) {
+				notification_data["buttons"] = buttons;
+			}
 		}
 
 		browser.notifications.create(String(notification_id), notification_data);

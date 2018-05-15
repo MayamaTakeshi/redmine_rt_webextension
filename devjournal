@@ -74,3 +74,6 @@ Obs: about buttons, this chrome version requires to hover over the notification 
 However, by setting option "requireInteraction" to true, the buttons became visible without need to hovering in and the panel was not dismissed by hovering out.
 
 
+As for Firefox:
+Version 60.0 (Quantum) doesn't support neither "requireInteraction" nor "buttons" but iconUrl is working properly.
+Also this new version has an issue and we are unable to input the password as as soon as we enter the user name and try move the focus to password input field the popup panel closes (to test the rest of the functionality, I worked around this by forcing a value in the field).
