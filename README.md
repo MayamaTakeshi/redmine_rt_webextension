@@ -1,3 +1,9 @@
+# ATTENTION 
+
+This webextension is not available anymore at chrome store.
+
+Instead, please use latest version of https://github.com/MayamaTakeshi/redmine_rt that permits to popup issue tabs by keeping one special tab open to listen to open_url commands.
+
 # redmine_rt_webextension
 Browser webextension to be used with redmine_rt plugin (https://github.com/MayamaTakeshi/redmine_rt).
 
